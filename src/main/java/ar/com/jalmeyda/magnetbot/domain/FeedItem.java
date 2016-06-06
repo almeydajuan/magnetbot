@@ -1,4 +1,4 @@
-package ar.com.jalmeyda.domain;
+package ar.com.jalmeyda.magnetbot.domain;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -58,4 +58,10 @@ public class FeedItem {
     public int hashCode() {
         return new HashCodeBuilder().append(getTitle()).toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }
+

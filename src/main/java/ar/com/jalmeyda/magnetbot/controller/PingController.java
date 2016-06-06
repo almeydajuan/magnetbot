@@ -1,4 +1,4 @@
-package ar.com.jalmeyda.controller;
+package ar.com.jalmeyda.magnetbot.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,6 +1,6 @@
-package ar.com.jalmeyda.domain.parser;
+package ar.com.jalmeyda.magnetbot.domain.parser;
 
-import ar.com.jalmeyda.domain.FeedItem;
+import ar.com.jalmeyda.magnetbot.domain.FeedItem;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;

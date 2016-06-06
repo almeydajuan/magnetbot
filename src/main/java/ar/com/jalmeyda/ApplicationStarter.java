@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan(basePackages = {"ar.com.jalmeyda.controller", "ar.com.jalmeyda.job"})
+@ComponentScan(basePackages = {"ar.com.jalmeyda.magnetbot.controller", "ar.com.jalmeyda.magnetbot.job", "ar.com.jalmeyda.magnetbot.dao"})
 public class ApplicationStarter {
 
     public static void main(String[] args) throws Exception {
