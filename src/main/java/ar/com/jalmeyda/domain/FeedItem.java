@@ -1,5 +1,8 @@
 package ar.com.jalmeyda.domain;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * Created by Juan Almeyda on 6/3/2016.
  */
@@ -40,5 +43,19 @@ public class FeedItem {
 
     public void setPubDate(String pubDate) {
         this.pubDate = pubDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof FeedItem) {
+            return new EqualsBuilder().append(getTitle(), ((FeedItem) obj).getTitle()).isEquals();
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(getTitle()).toHashCode();
     }
 }
