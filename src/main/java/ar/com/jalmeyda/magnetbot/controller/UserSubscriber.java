@@ -35,6 +35,11 @@ public class UserSubscriber {
         return convertToNames(userSubscribeService.getFeedsFromUser(userId));
     }
 
+    @RequestMapping("/subscribtions")
+    public Set<String> subscribtions(Long userId) {
+        return convertToNames(userSubscribeService.getFeedsFromUser(userId));
+    }
+
     @RequestMapping("/series")
     public Set<String> series() {
         return serieIdResolver.getAllSerieNames();
