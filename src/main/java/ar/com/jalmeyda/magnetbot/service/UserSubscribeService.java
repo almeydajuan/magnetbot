@@ -19,12 +19,20 @@ public class UserSubscribeService {
         Set<Integer> feedsForUser = userFeedsDao.getFeedsForUser(userId);
         feedsForUser.add(feedId);
         userFeedsDao.updateFeedsForUser(userId, feedsForUser);
+
+        Set<Long> usersForFeed = userFeedsDao.getUsersFromFeed(feedId);
+        usersForFeed.add(userId);
+        userFeedsDao.updateUsersForFeed(feedId, usersForFeed);
     }
 
     public void unsubscribeFromFeed(Long userId, Integer feedId) {
         Set<Integer> feedsForUser = userFeedsDao.getFeedsForUser(userId);
         feedsForUser.remove(feedId);
         userFeedsDao.updateFeedsForUser(userId, feedsForUser);
+
+        Set<Long> usersForFeed = userFeedsDao.getUsersFromFeed(feedId);
+        usersForFeed.remove(userId);
+        userFeedsDao.updateUsersForFeed(feedId, usersForFeed);
     }
 
     public Set<Integer> getFeedsFromUser(Long userId) {
