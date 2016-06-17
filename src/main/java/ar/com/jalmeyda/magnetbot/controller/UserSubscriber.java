@@ -23,21 +23,21 @@ public class UserSubscriber {
 
     @RequestMapping("/subscribe")
     public Set<String> subscribe(Long userId, String serieName) {
-        Integer feedId = getFeedId(serieName);
-        userSubscribeService.subscribeToFeed(userId, feedId);
-        return convertToNames(userSubscribeService.getFeedsFromUser(userId));
+        Integer seriesId = getSeriesId(serieName);
+        userSubscribeService.subscribeToFeed(userId, seriesId);
+        return convertToNames(userSubscribeService.getSubscriptionsFromUser(userId));
     }
 
     @RequestMapping("/unsubscribe")
     public Set<String> unsubscribe(Long userId, String serieName) {
-        Integer feedId = getFeedId(serieName);
-        userSubscribeService.unsubscribeFromFeed(userId, feedId);
-        return convertToNames(userSubscribeService.getFeedsFromUser(userId));
+        Integer seriesId = getSeriesId(serieName);
+        userSubscribeService.unsubscribeFromFeed(userId, seriesId);
+        return convertToNames(userSubscribeService.getSubscriptionsFromUser(userId));
     }
 
-    @RequestMapping("/subscribtions")
-    public Set<String> subscribtions(Long userId) {
-        return convertToNames(userSubscribeService.getFeedsFromUser(userId));
+    @RequestMapping("/subscriptions")
+    public Set<String> subscriptions(Long userId) {
+        return convertToNames(userSubscribeService.getSubscriptionsFromUser(userId));
     }
 
     @RequestMapping("/series")
@@ -45,11 +45,11 @@ public class UserSubscriber {
         return seriesRepository.findAll().stream().map(series -> series.getSeriesName()).collect(Collectors.toSet());
     }
 
-    private Integer getFeedId(String serieName) {
-        Integer feedId = seriesRepository.findBySeriesName(serieName).getSeriesId();
-        if (feedId == null)
+    private Integer getSeriesId(String serieName) {
+        Integer seriesId = seriesRepository.findBySeriesName(serieName).getSeriesId();
+        if (seriesId == null)
             throw new RuntimeException("Serie: " + serieName + " was not found");
-        return feedId;
+        return seriesId;
     }
 
     private Set<String> convertToNames(Set<Integer> feedsFromUser) {

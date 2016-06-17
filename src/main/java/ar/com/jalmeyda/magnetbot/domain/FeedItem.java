@@ -2,16 +2,21 @@ package ar.com.jalmeyda.magnetbot.domain;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.springframework.data.annotation.Id;
 
 /**
  * Created by Juan Almeyda on 6/3/2016.
  */
 public class FeedItem {
 
+    @Id
+    private String id;
+
     private String title;
     private String description;
     private String link;
     private String pubDate;
+    private Integer seriesId;
 
     public String getTitle() {
         return title;
@@ -45,10 +50,19 @@ public class FeedItem {
         this.pubDate = pubDate;
     }
 
+    public Integer getSeriesId() {
+        return seriesId;
+    }
+
+    public void setSeriesId(Integer seriesId) {
+        this.seriesId = seriesId;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof FeedItem) {
-            return new EqualsBuilder().append(getTitle(), ((FeedItem) obj).getTitle()).isEquals();
+            FeedItem other = (FeedItem) obj;
+            return new EqualsBuilder().append(getTitle(), other.getTitle()).append(getSeriesId(), other.getSeriesId()).isEquals();
         } else {
             return false;
         }
@@ -56,7 +70,7 @@ public class FeedItem {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(getTitle()).toHashCode();
+        return new HashCodeBuilder().append(getTitle()).append(getSeriesId()).toHashCode();
     }
 
     @Override

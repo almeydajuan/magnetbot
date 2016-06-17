@@ -1,8 +1,7 @@
 package ar.com.jalmeyda.magnetbot.job;
 
-import ar.com.jalmeyda.magnetbot.dao.FeedDao;
+import ar.com.jalmeyda.magnetbot.dao.FeedItemRepository;
 import ar.com.jalmeyda.magnetbot.dao.SeriesRepository;
-import ar.com.jalmeyda.magnetbot.dao.UserFeedsDao;
 import ar.com.jalmeyda.magnetbot.domain.FeedItem;
 import ar.com.jalmeyda.magnetbot.domain.Series;
 import ar.com.jalmeyda.magnetbot.service.RSSFeedParser;
@@ -11,7 +10,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -25,34 +23,30 @@ public class ReadFeedJob {
     private String feedUrl;
 
     @Resource
-    private FeedDao feedDao;
+    private FeedItemRepository feedItemRepository;
 
     @Resource
     private SeriesRepository seriesRepository;
 
-    @Resource
-    private UserFeedsDao userFeedsDao;
-
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 3600000)
     public void readFeed() {
         for (Series series : seriesRepository.findAll()) {
             Integer seriesId = series.getSeriesId();
-            RSSFeedParser rssFeedParser = new RSSFeedParser(String.format(feedUrl, seriesId));
+            RSSFeedParser rssFeedParser = new RSSFeedParser(String.format(feedUrl, seriesId), seriesId);
             List<FeedItem> newFeedItems = rssFeedParser.readFeed();
-            List<FeedItem> feedItemsToPersist = new ArrayList<>(newFeedItems);
-            List<FeedItem> oldFeedItems = feedDao.getItemsFromFeed(seriesId);
+            List<FeedItem> oldFeedItems = feedItemRepository.findBySeriesId(seriesId);
             newFeedItems.removeAll(oldFeedItems);
-            feedDao.updateFeed(seriesId, feedItemsToPersist);
-            notifyUsers(newFeedItems, seriesId);
+            if (!newFeedItems.isEmpty()) {
+                feedItemRepository.save(newFeedItems);
+                notifyUsers(newFeedItems, seriesId);
+            }
         }
     }
 
-    private void notifyUsers(List<FeedItem> newFeedItems, Integer serieId) {
-        if (!newFeedItems.isEmpty()) {
-            Set<Long> usersFromFeed = userFeedsDao.getUsersFromFeed(serieId);
-            for (Long user : usersFromFeed) {
-                // TODO: notify user
-            }
+    private void notifyUsers(List<FeedItem> newFeedItems, Integer seriesId) {
+        Set<Long> usersFromFeed = seriesRepository.findBySeriesId(seriesId).getUserIds();
+        for (Long user : usersFromFeed) {
+            // TODO: notify user
         }
     }
 }

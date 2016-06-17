@@ -26,8 +26,10 @@ public class RSSFeedParser {
     private static final String ITEM = "item";
 
     final URL url;
+    private Integer seriesId;
 
-    public RSSFeedParser(String feedUrl) {
+    public RSSFeedParser(String feedUrl, Integer seriesId) {
+        this.seriesId = seriesId;
         try {
             this.url = new URL(feedUrl);
         } catch (MalformedURLException ex) {
@@ -75,6 +77,7 @@ public class RSSFeedParser {
                         message.setDescription(description);
                         message.setLink(link);
                         message.setPubDate(pubdate);
+                        message.setSeriesId(seriesId);
                         feedItems.add(message);
                         eventReader.nextEvent();
                         continue;

@@ -1,9 +1,12 @@
 package ar.com.jalmeyda.magnetbot.service;
 
-import ar.com.jalmeyda.magnetbot.dao.UserFeedsDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import ar.com.jalmeyda.magnetbot.dao.SeriesRepository;
+import ar.com.jalmeyda.magnetbot.dao.UserRepository;
+import ar.com.jalmeyda.magnetbot.domain.Series;
+import ar.com.jalmeyda.magnetbot.domain.User;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Set;
 
 /**
@@ -12,30 +15,37 @@ import java.util.Set;
 @Component
 public class UserSubscribeService {
 
-    @Autowired
-    private UserFeedsDao userFeedsDao;
+    @Resource
+    private UserRepository userRepository;
 
-    public void subscribeToFeed(Long userId, Integer feedId) {
-        Set<Integer> feedsForUser = userFeedsDao.getFeedsForUser(userId);
-        feedsForUser.add(feedId);
-        userFeedsDao.updateFeedsForUser(userId, feedsForUser);
+    @Resource
+    private SeriesRepository seriesRepository;
 
-        Set<Long> usersForFeed = userFeedsDao.getUsersFromFeed(feedId);
-        usersForFeed.add(userId);
-        userFeedsDao.updateUsersForFeed(feedId, usersForFeed);
+    public void subscribeToFeed(Long userId, Integer serieId) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            user = new User(userId);
+            userRepository.save(user);
+        }
+        user.getSeriesIds().add(serieId);
+        userRepository.save(user);
+
+        Series series = seriesRepository.findBySeriesId(serieId);
+        series.getUserIds().add(userId);
+        seriesRepository.save(series);
     }
 
-    public void unsubscribeFromFeed(Long userId, Integer feedId) {
-        Set<Integer> feedsForUser = userFeedsDao.getFeedsForUser(userId);
-        feedsForUser.remove(feedId);
-        userFeedsDao.updateFeedsForUser(userId, feedsForUser);
+    public void unsubscribeFromFeed(Long userId, Integer serieId) {
+        User user = userRepository.findByUserId(userId);
+        user.getSeriesIds().remove(serieId);
+        userRepository.save(user);
 
-        Set<Long> usersForFeed = userFeedsDao.getUsersFromFeed(feedId);
-        usersForFeed.remove(userId);
-        userFeedsDao.updateUsersForFeed(feedId, usersForFeed);
+        Series series = seriesRepository.findBySeriesId(serieId);
+        series.getUserIds().remove(userId);
+        seriesRepository.save(series);
     }
 
-    public Set<Integer> getFeedsFromUser(Long userId) {
-        return userFeedsDao.getFeedsForUser(userId);
+    public Set<Integer> getSubscriptionsFromUser(Long userId) {
+        return userRepository.findByUserId(userId).getSeriesIds();
     }
 }
