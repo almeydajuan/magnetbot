@@ -16,15 +16,15 @@ import java.util.Properties;
 @Configuration
 public class SpringConfiguration {
 
-    @Value("${seriesIndex}")
-    private String seriesIndex;
+    @Value("${seriesFile}")
+    private String seriesFile;
 
     @Bean
     public SerieIdResolver serieIdResolver() throws IOException {
         Map<Integer, String> seriesNameById = new HashMap<>();
         Map<String, Integer> seriesIdByName = new HashMap<>();
         Properties properties = new Properties();
-        properties.load(SpringConfiguration.class.getClassLoader().getResourceAsStream(seriesIndex));
+        properties.load(SpringConfiguration.class.getClassLoader().getResourceAsStream(seriesFile));
         for (String key : properties.stringPropertyNames()) {
             String value = properties.getProperty(key);
             seriesNameById.put(Integer.valueOf(key), value);
