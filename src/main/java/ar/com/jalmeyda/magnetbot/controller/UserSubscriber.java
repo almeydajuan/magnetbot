@@ -1,11 +1,11 @@
 package ar.com.jalmeyda.magnetbot.controller;
 
-import ar.com.jalmeyda.magnetbot.service.SerieIdResolver;
+import ar.com.jalmeyda.magnetbot.dao.SeriesRepository;
 import ar.com.jalmeyda.magnetbot.service.UserSubscribeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @RestController
 public class UserSubscriber {
 
-    @Autowired
+    @Resource
     private UserSubscribeService userSubscribeService;
 
-    @Autowired
-    private SerieIdResolver serieIdResolver;
+    @Resource
+    private SeriesRepository seriesRepository;
 
     @RequestMapping("/subscribe")
     public Set<String> subscribe(Long userId, String serieName) {
@@ -42,18 +42,18 @@ public class UserSubscriber {
 
     @RequestMapping("/series")
     public Set<String> series() {
-        return serieIdResolver.getAllSerieNames();
+        return seriesRepository.findAll().stream().map(series -> series.getSeriesName()).collect(Collectors.toSet());
     }
 
     private Integer getFeedId(String serieName) {
-        Integer feedId = serieIdResolver.getSerieIdFromName(serieName);
+        Integer feedId = seriesRepository.findBySeriesName(serieName).getSeriesId();
         if (feedId == null)
             throw new RuntimeException("Serie: " + serieName + " was not found");
         return feedId;
     }
 
     private Set<String> convertToNames(Set<Integer> feedsFromUser) {
-        return feedsFromUser.stream().map(feed -> serieIdResolver.getSerieNameFromId(feed)).collect(Collectors.toSet());
+        return feedsFromUser.stream().map(feed -> seriesRepository.findBySeriesId(feed).getSeriesName()).collect(Collectors.toSet());
     }
 
 }

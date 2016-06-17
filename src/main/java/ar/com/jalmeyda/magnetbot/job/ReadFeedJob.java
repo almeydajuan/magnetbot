@@ -1,10 +1,11 @@
 package ar.com.jalmeyda.magnetbot.job;
 
 import ar.com.jalmeyda.magnetbot.dao.FeedDao;
+import ar.com.jalmeyda.magnetbot.dao.SeriesRepository;
 import ar.com.jalmeyda.magnetbot.dao.UserFeedsDao;
 import ar.com.jalmeyda.magnetbot.domain.FeedItem;
+import ar.com.jalmeyda.magnetbot.domain.Series;
 import ar.com.jalmeyda.magnetbot.service.RSSFeedParser;
-import ar.com.jalmeyda.magnetbot.service.SerieIdResolver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,22 +28,22 @@ public class ReadFeedJob {
     private FeedDao feedDao;
 
     @Resource
-    private SerieIdResolver serieIdResolver;
+    private SeriesRepository seriesRepository;
 
     @Resource
     private UserFeedsDao userFeedsDao;
 
     @Scheduled(fixedRate = 60000)
     public void readFeed() {
-        for (Integer serieId : serieIdResolver.getAllSerieIds()) {
-            String serieFeedUrl = feedUrl;
-            RSSFeedParser rssFeedParser = new RSSFeedParser(serieFeedUrl.replace("$ID", serieId.toString()));
+        for (Series series : seriesRepository.findAll()) {
+            Integer seriesId = series.getSeriesId();
+            RSSFeedParser rssFeedParser = new RSSFeedParser(String.format(feedUrl, seriesId));
             List<FeedItem> newFeedItems = rssFeedParser.readFeed();
             List<FeedItem> feedItemsToPersist = new ArrayList<>(newFeedItems);
-            List<FeedItem> oldFeedItems = feedDao.getItemsFromFeed(serieId);
+            List<FeedItem> oldFeedItems = feedDao.getItemsFromFeed(seriesId);
             newFeedItems.removeAll(oldFeedItems);
-            feedDao.updateFeed(serieId, feedItemsToPersist);
-            notifyUsers(newFeedItems, serieId);
+            feedDao.updateFeed(seriesId, feedItemsToPersist);
+            notifyUsers(newFeedItems, seriesId);
         }
     }
 

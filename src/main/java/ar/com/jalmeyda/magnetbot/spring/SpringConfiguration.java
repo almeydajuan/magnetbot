@@ -1,13 +1,13 @@
 package ar.com.jalmeyda.magnetbot.spring;
 
-import ar.com.jalmeyda.magnetbot.service.SerieIdResolver;
+import ar.com.jalmeyda.magnetbot.dao.SeriesRepository;
+import ar.com.jalmeyda.magnetbot.domain.Series;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -19,17 +19,19 @@ public class SpringConfiguration {
     @Value("${seriesFile}")
     private String seriesFile;
 
-    @Bean
-    public SerieIdResolver serieIdResolver() throws IOException {
-        Map<Integer, String> seriesNameById = new HashMap<>();
-        Map<String, Integer> seriesIdByName = new HashMap<>();
+    @Autowired
+    private SeriesRepository seriesRepository;
+
+    @PostConstruct
+    public void init() throws IOException {
         Properties properties = new Properties();
         properties.load(SpringConfiguration.class.getClassLoader().getResourceAsStream(seriesFile));
         for (String key : properties.stringPropertyNames()) {
             String value = properties.getProperty(key);
-            seriesNameById.put(Integer.valueOf(key), value);
-            seriesIdByName.put(value, Integer.valueOf(key));
+            if (seriesRepository.findBySeriesId(Integer.valueOf(key)) == null) {
+                seriesRepository.save(new Series(Integer.valueOf(key), value));
+            }
         }
-        return new SerieIdResolver(seriesNameById, seriesIdByName);
     }
+
 }
