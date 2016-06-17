@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +34,8 @@ public class ReadFeedJob {
         for (Series series : seriesRepository.findAll()) {
             Integer seriesId = series.getSeriesId();
             RSSFeedParser rssFeedParser = new RSSFeedParser(String.format(feedUrl, seriesId), seriesId);
-            List<FeedItem> newFeedItems = rssFeedParser.readFeed();
+//            List<FeedItem> newFeedItems = rssFeedParser.readFeed();
+            List<FeedItem> newFeedItems = new LinkedList<>();
             List<FeedItem> oldFeedItems = feedItemRepository.findBySeriesId(seriesId);
             newFeedItems.removeAll(oldFeedItems);
             if (!newFeedItems.isEmpty()) {
