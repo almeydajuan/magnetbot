@@ -1,5 +1,7 @@
 package ar.com.jalmeyda.magnetbot.domain;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.data.annotation.Id;
 
 import java.util.HashSet;
@@ -16,11 +18,13 @@ public class Series {
     private Integer seriesId;
     private String seriesName;
     private Set<Long> userIds;
+    private DateTime lastSuccessfulSync;
 
     public Series(Integer seriesId, String seriesName) {
         this.seriesId = seriesId;
         this.seriesName = seriesName;
         this.userIds = new HashSet<>();
+        this.lastSuccessfulSync = DateTime.now(DateTimeZone.UTC);
     }
 
     public Integer getSeriesId() {
@@ -33,6 +37,14 @@ public class Series {
 
     public Set<Long> getUserIds() {
         return userIds;
+    }
+
+    public DateTime getLastSuccessfulSync() {
+        return lastSuccessfulSync;
+    }
+
+    public void setLastSuccessfulSync(DateTime lastSuccessfulSync) {
+        this.lastSuccessfulSync = lastSuccessfulSync;
     }
 
     @Override
