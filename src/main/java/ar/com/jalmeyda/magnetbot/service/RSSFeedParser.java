@@ -1,4 +1,4 @@
-package ar.com.jalmeyda.magnetbot.domain.parser;
+package ar.com.jalmeyda.magnetbot.service;
 
 import ar.com.jalmeyda.magnetbot.domain.FeedItem;
 

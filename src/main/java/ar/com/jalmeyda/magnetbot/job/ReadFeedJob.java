@@ -3,7 +3,7 @@ package ar.com.jalmeyda.magnetbot.job;
 import ar.com.jalmeyda.magnetbot.dao.FeedDao;
 import ar.com.jalmeyda.magnetbot.dao.UserFeedsDao;
 import ar.com.jalmeyda.magnetbot.domain.FeedItem;
-import ar.com.jalmeyda.magnetbot.domain.parser.RSSFeedParser;
+import ar.com.jalmeyda.magnetbot.service.RSSFeedParser;
 import ar.com.jalmeyda.magnetbot.service.SerieIdResolver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;

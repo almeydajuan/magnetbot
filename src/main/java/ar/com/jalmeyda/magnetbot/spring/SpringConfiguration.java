@@ -1,6 +1,7 @@
 package ar.com.jalmeyda.magnetbot.spring;
 
 import ar.com.jalmeyda.magnetbot.service.SerieIdResolver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,12 +16,15 @@ import java.util.Properties;
 @Configuration
 public class SpringConfiguration {
 
+    @Value("${seriesIndex}")
+    private String seriesIndex;
+
     @Bean
     public SerieIdResolver serieIdResolver() throws IOException {
         Map<Integer, String> seriesNameById = new HashMap<>();
         Map<String, Integer> seriesIdByName = new HashMap<>();
         Properties properties = new Properties();
-        properties.load(SpringConfiguration.class.getClassLoader().getResourceAsStream("series.properties"));
+        properties.load(SpringConfiguration.class.getClassLoader().getResourceAsStream(seriesIndex));
         for (String key : properties.stringPropertyNames()) {
             String value = properties.getProperty(key);
             seriesNameById.put(Integer.valueOf(key), value);

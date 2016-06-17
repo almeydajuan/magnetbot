@@ -1,4 +1,4 @@
-package ar.com.jalmeyda;
+package ar.com.jalmeyda.magnetbot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
