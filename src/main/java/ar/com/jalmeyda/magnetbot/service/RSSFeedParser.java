@@ -11,8 +11,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Juan Almeyda on 6/3/2016.
@@ -24,6 +28,8 @@ public class RSSFeedParser {
     private static final String LINK = "link";
     private static final String PUB_DATE = "pubDate";
     private static final String ITEM = "item";
+
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH);
 
     final URL url;
     private Integer seriesId;
@@ -76,7 +82,7 @@ public class RSSFeedParser {
                         message.setTitle(title);
                         message.setDescription(description);
                         message.setLink(link);
-                        message.setPubDate(pubdate);
+                        message.setPubDate(DATE_FORMAT.parse(pubdate));
                         message.setSeriesId(seriesId);
                         feedItems.add(message);
                         eventReader.nextEvent();
@@ -84,7 +90,7 @@ public class RSSFeedParser {
                     }
                 }
             }
-        } catch (XMLStreamException e) {
+        } catch (XMLStreamException | ParseException e) {
             throw new RuntimeException(e);
         }
         return feedItems;

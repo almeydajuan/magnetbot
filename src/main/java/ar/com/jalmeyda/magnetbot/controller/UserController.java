@@ -13,7 +13,7 @@ import java.util.Set;
  * Created by Juan Almeyda on 6/7/2016.
  */
 @RestController
-public class UserSubscriber {
+public class UserController {
 
     @Resource
     private UserService userService;

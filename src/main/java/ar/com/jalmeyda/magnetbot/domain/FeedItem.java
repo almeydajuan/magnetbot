@@ -4,6 +4,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.data.annotation.Id;
 
+import java.util.Date;
+
 /**
  * Created by Juan Almeyda on 6/3/2016.
  */
@@ -15,7 +17,7 @@ public class FeedItem {
     private String title;
     private String description;
     private String link;
-    private String pubDate;
+    private Date pubDate;
     private Integer seriesId;
 
     public String getTitle() {
@@ -42,11 +44,11 @@ public class FeedItem {
         this.link = link;
     }
 
-    public String getPubDate() {
+    public Date getPubDate() {
         return pubDate;
     }
 
-    public void setPubDate(String pubDate) {
+    public void setPubDate(Date pubDate) {
         this.pubDate = pubDate;
     }
 
