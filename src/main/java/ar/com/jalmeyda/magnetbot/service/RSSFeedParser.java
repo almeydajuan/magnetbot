@@ -24,7 +24,6 @@ import java.util.Locale;
 public class RSSFeedParser {
 
     private static final String TITLE = "title";
-    private static final String DESCRIPTION = "description";
     private static final String LINK = "link";
     private static final String PUB_DATE = "pubDate";
     private static final String ITEM = "item";
@@ -47,7 +46,6 @@ public class RSSFeedParser {
         List<FeedItem> feedItems = new ArrayList<>();
         try {
             String title = "";
-            String description = "";
             String link = "";
             String pubdate = "";
 
@@ -66,9 +64,6 @@ public class RSSFeedParser {
                         case TITLE:
                             title = getCharacterData(event, eventReader);
                             break;
-                        case DESCRIPTION:
-                            description = getComplexField(event, eventReader);
-                            break;
                         case LINK:
                             link = getComplexField(event, eventReader);
                             break;
@@ -80,7 +75,6 @@ public class RSSFeedParser {
                     if (event.asEndElement().getName().getLocalPart() == (ITEM)) {
                         FeedItem message = new FeedItem();
                         message.setTitle(title);
-                        message.setDescription(description);
                         message.setLink(link);
                         message.setPubDate(DATE_FORMAT.parse(pubdate));
                         message.setSeriesId(seriesId);

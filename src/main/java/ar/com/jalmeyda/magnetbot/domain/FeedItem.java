@@ -15,7 +15,6 @@ public class FeedItem {
     private String id;
 
     private String title;
-    private String description;
     private String link;
     private Date pubDate;
     private Integer seriesId;
@@ -26,14 +25,6 @@ public class FeedItem {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getLink() {
