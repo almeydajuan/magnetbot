@@ -13,9 +13,9 @@ public class FacebookIntegrationController {
     private static final String VALIDATION_TOKEN = "EAANeGQLckDoBAAQxsufSXijxEvZChK4iVrFGX4zL3VJCFctFb9mIUhC4DyEcm0vQ5qM1sK04p4ZAvZC9QK5zvqHc7HFpiGb4RzkEZBZA8skWKZB123ZCvIOa0tvMBaUuLOIsy1zvOtqQfZCSFSrq51Ir3ZCSb7niRFKirZBs2M1UtVQgZDZD";
 
     @RequestMapping("/webhook")
-    public String webHook(@RequestParam(name = "hub.mode") String mode,
-                          @RequestParam(name = "hub.verify_token") String token,
-                          @RequestParam(name = "hub.challenge") String challenge) {
+    public String webHook(@RequestParam(name = "hub.mode", required = false) String mode,
+                          @RequestParam(name = "hub.verify_token", required = false) String token,
+                          @RequestParam(name = "hub.challenge", required = false) String challenge) {
         System.out.println("********************************************************************");
         System.out.println(mode);
         System.out.println(token);
