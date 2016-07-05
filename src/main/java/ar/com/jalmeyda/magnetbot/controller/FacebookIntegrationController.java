@@ -15,7 +15,7 @@ public class FacebookIntegrationController {
     @RequestMapping("/webhook")
     public String webHook(@RequestParam(name = "hub.mode", required = false) String mode,
                           @RequestParam(name = "hub.verify_token", required = false) String token,
-                          @RequestParam(name = "hub.challenge", required = false) String challenge) {
+                          @RequestParam(name = "hub.challenge", required = false, defaultValue = "empty") String challenge) {
         System.out.println("********************************************************************");
         System.out.println(mode);
         System.out.println(token);
